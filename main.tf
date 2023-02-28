@@ -4,6 +4,10 @@ resource "aws_s3_bucket" "mn-test-bucket" {
 resource "aws_s3_bucket" "mn-test-bucket-2" {
 	bucket = "mn-bucket-27022023ok-final"
 }
+
+resource "aws_vpc" "rnd-vpc" {
+  cidr_block = "10.0.0.0/16"
+}
 # resource "aws_instance" "webserver" {
 # 	ami = "ami-0753e0e42b20e96e3"
 # 	instance_type = "t2.micro"
