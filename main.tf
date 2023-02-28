@@ -104,13 +104,13 @@ resource "aws_instance" "rnd-vm-1" {
 	]
 
     user_data = <<EOF
-	    #!/bin/bash
-		apt-get install apache2 -y
- 		systemctl start apache2
- 		systemctl enable apache2
- 		echo “This is a test page okk" > /var/www/html/index.html
- 		echo "<h1>Deployed via Terraform</h1>" | sudo tee /var/www/html/index.html
- 	EOF
+#!/bin/bash
+apt-get install apache2 -y
+systemctl start apache2
+systemctl enable apache2
+echo “This is a test page okk" > /var/www/html/index.html
+echo "<h1>Deployed via Terraform</h1>" | sudo tee /var/www/html/index.html
+EOF
  
 	# user_data = <<EOF
 	# 	#!/bin/bash
