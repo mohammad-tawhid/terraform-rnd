@@ -42,6 +42,8 @@ resource "aws_internet_gateway" "igw" {
   }
 }
 
+
+
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.rnd-vpc.id
 
@@ -77,9 +79,18 @@ data "aws_ami" "ubuntu20" {
   owners = ["099720109477"] # Canonical
 }
 
+data "aws_ami" "amazon-2" {
+  most_recent = true
+
+  filter {
+    name = "name"
+    values = ["amzn2-ami-hvm-*-x86_64-ebs"]
+  }
+  owners = ["amazon"]
+}
 
 resource "aws_instance" "rnd-vm-1" {
-	ami           = "ami-0f2eac25772cd4e36"
+	ami           = data.aws_ami.amazon-2.id
 	instance_type = "t2.micro"
 	key_name = "mn-new-key"
 	subnet_id = aws_subnet.rnd-public-subnet.id
@@ -92,6 +103,15 @@ resource "aws_instance" "rnd-vm-1" {
 	  aws_security_group.terraform-ssh-access
 	]
 
+    # user_data = <<EOF
+	#     #!/bin/bash
+	# 	apt-get install apache2 -y
+ 	# 	systemctl start apache2
+ 	# 	systemctl enable apache2
+ 	# 	echo “This is a test page okk" > /var/www/html/index.html
+ 	# 	echo "<h1>Deployed via Terraform</h1>" | sudo tee /var/www/html/index.html
+ 	# EOF
+ 
 	user_data = <<EOF
 		#!/bin/bash
 		yum update -y
