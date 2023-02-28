@@ -79,7 +79,7 @@ data "aws_ami" "ubuntu20" {
 
 
 resource "aws_instance" "rnd-vm-1" {
-	ami           = data.aws_ami.ubuntu20.id
+	ami           = "ami-0f2eac25772cd4e36"
 	instance_type = "t2.micro"
 	key_name = "mn-new-key"
 	subnet_id = aws_subnet.rnd-public-subnet.id
@@ -94,11 +94,11 @@ resource "aws_instance" "rnd-vm-1" {
 
 	user_data = <<EOF
 		#!/bin/bash
-		sudo apt-get update
-		sudo apt-get install apache2 -y
-		sudo systemctl start apache2
-		sudo systemctl enable apache2
-		sudo echo "<h1>Deployed via Terraform</h1>" | sudo tee /var/www/html/index.html
+		yum update -y
+		yum install -y httpd.x86_64
+		systemctl start httpd.service
+		systemctl enable httpd.service
+		echo ?Hello World from $(hostname -f)? > /var/www/html/index.html
 	EOF
 }
 
