@@ -12,17 +12,28 @@ resource "aws_vpc" "rnd-vpc" {
   }
 }
 
-resource "aws_subnet" "rnd-subnet1" {
+resource "aws_subnet" "rnd-public-subnet" {
   vpc_id     = aws_vpc.rnd-vpc.id
   cidr_block = "10.0.1.0/24"
   availability_zone = "ap-southeast-1a"
+  map_public_ip_on_launch = "true"
 
   tags = {
-    Name = "rnd-subnet"
+    Name = "public-subnet"
   }
 }
 
-#test
+
+resource "aws_subnet" "rnd-private-subnet" {
+  vpc_id     = aws_vpc.rnd-vpc.id
+  cidr_block = "10.0.2.0/24"
+  availability_zone = "ap-southeast-1a"
+
+  tags = {
+    Name = "private-subnet"
+  }
+}
+
 # resource "aws_instance" "webserver" {
 # 	ami = "ami-0753e0e42b20e96e3"
 # 	instance_type = "t2.micro"
