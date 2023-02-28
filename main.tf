@@ -7,6 +7,8 @@ resource "aws_s3_bucket" "mn-test-bucket-2" {
 
 resource "aws_vpc" "rnd-vpc" {
   cidr_block = "10.0.0.0/16"
+  tags = {
+    Name = "rnd-vpc"
 }
 
 resource "aws_subnet" "rnd-subnet1" {
@@ -15,7 +17,7 @@ resource "aws_subnet" "rnd-subnet1" {
   availability_zone = "ap-southeast-1a"
 
   tags = {
-    Name = "Main"
+    Name = "rnd-subnet"
   }
 }
 
