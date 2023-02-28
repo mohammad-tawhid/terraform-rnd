@@ -96,12 +96,7 @@ resource "aws_security_group" "terraform-ssh-access" {
 	name = "terraform-ssh-access"
 	description = "Allow SSH access from the Internet"
 	vpc_id = aws_vpc.rnd-vpc.id
-	ingress {
-	from_port = 22
-	to_port = 22
-	protocol = "tcp"
-	cidr_blocks = ["0.0.0.0/0"]
-    }
+
 	ingress {
 	from_port = 80
         to_port = 80
