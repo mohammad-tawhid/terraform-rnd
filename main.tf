@@ -55,8 +55,8 @@ resource "aws_route_table" "public" {
   }
 }
 
-resource "aws_route_table_association" "temporary-gateway" {
-  gateway_id     = aws_internet_gateway.igw.id
+resource "aws_route_table_association" "public-subnet-to-igw" {
+  subnet_id     = aws_subnet.rnd-public-subnet.id
   route_table_id = aws_route_table.public.id
 }
 
