@@ -8,6 +8,16 @@ resource "aws_s3_bucket" "mn-test-bucket-2" {
 resource "aws_vpc" "rnd-vpc" {
   cidr_block = "10.0.0.0/16"
 }
+
+resource "aws_subnet" "rnd-subnet1" {
+  vpc_id     = aws_vpc.rnd-vpc.id
+  cidr_block = "10.0.1.0/24"
+  availability_zone = "ap-southeast-1"
+
+  tags = {
+    Name = "Main"
+  }
+}
 # resource "aws_instance" "webserver" {
 # 	ami = "ami-0753e0e42b20e96e3"
 # 	instance_type = "t2.micro"
