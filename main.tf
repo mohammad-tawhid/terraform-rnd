@@ -55,6 +55,11 @@ resource "aws_route_table" "public" {
   }
 }
 
+resource "aws_route_table_association" "temporary-gateway" {
+  gateway_id     = aws_internet_gateway.igw.id
+  route_table_id = aws_route_table.public.id
+}
+
 # resource "aws_instance" "webserver" {
 # 	ami = "ami-0753e0e42b20e96e3"
 # 	instance_type = "t2.micro"
