@@ -42,6 +42,18 @@ resource "aws_internet_gateway" "igw" {
   }
 }
 
+resource "aws_route_table" "public" {
+  vpc_id = aws_vpc.rnd-vpc.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.igw.id
+  }
+
+  tags = {
+    Name = "default-route-for-public-subnet"
+  }
+}
 
 # resource "aws_instance" "webserver" {
 # 	ami = "ami-0753e0e42b20e96e3"
