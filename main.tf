@@ -34,6 +34,14 @@ resource "aws_subnet" "rnd-private-subnet" {
   }
 }
 
+resource "aws_internet_gateway" "igw" {
+  vpc_id = aws_vpc.rnd-vpc.id
+
+  tags = {
+    Name = "rnd-igw"
+  }
+}
+
 
 # resource "aws_instance" "webserver" {
 # 	ami = "ami-0753e0e42b20e96e3"
