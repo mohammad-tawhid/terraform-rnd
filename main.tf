@@ -12,7 +12,7 @@ resource "aws_vpc" "rnd-vpc" {
 resource "aws_subnet" "rnd-subnet1" {
   vpc_id     = aws_vpc.rnd-vpc.id
   cidr_block = "10.0.1.0/24"
-  availability_zone = "ap-southeast-1"
+  availability_zone = "ap-southeast-1a"
 
   tags = {
     Name = "Main"
