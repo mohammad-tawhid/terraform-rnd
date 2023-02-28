@@ -90,7 +90,7 @@ data "aws_ami" "amazon-2" {
 }
 
 resource "aws_instance" "rnd-vm-1" {
-	ami           = data.aws_ami.amazon-2.id
+	ami           = data.aws_ami.ubuntu20.id
 	instance_type = "t2.micro"
 	key_name = "mn-new-key"
 	subnet_id = aws_subnet.rnd-public-subnet.id
@@ -103,23 +103,23 @@ resource "aws_instance" "rnd-vm-1" {
 	  aws_security_group.terraform-ssh-access
 	]
 
-    # user_data = <<EOF
-	#     #!/bin/bash
-	# 	apt-get install apache2 -y
- 	# 	systemctl start apache2
- 	# 	systemctl enable apache2
- 	# 	echo “This is a test page okk" > /var/www/html/index.html
- 	# 	echo "<h1>Deployed via Terraform</h1>" | sudo tee /var/www/html/index.html
- 	# EOF
+    user_data = <<EOF
+	    #!/bin/bash
+		apt-get install apache2 -y
+ 		systemctl start apache2
+ 		systemctl enable apache2
+ 		echo “This is a test page okk" > /var/www/html/index.html
+ 		echo "<h1>Deployed via Terraform</h1>" | sudo tee /var/www/html/index.html
+ 	EOF
  
-	user_data = <<EOF
-		#!/bin/bash
-		yum update -y
-		yum install -y httpd.x86_64
-		systemctl start httpd.service
-		systemctl enable httpd.service
-		echo "Hello World from $(hostname -f)" > /var/www/html/index.html
-	EOF
+	# user_data = <<EOF
+	# 	#!/bin/bash
+	# 	yum update -y
+	# 	yum install -y httpd.x86_64
+	# 	systemctl start httpd.service
+	# 	systemctl enable httpd.service
+	# 	echo "Hello World from $(hostname -f)" > /var/www/html/index.html
+	# EOF
 }
 
 resource "aws_security_group" "terraform-ssh-access" {
