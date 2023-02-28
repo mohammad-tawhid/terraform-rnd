@@ -133,4 +133,7 @@ resource "aws_security_group" "terraform-ssh-access" {
 }
 output "public_ip_address" {
 	value = aws_instance.rnd-vm-1.public_ip
+	depends_on = [
+	  aws_instance.rnd-vm-1
+	]
 }
