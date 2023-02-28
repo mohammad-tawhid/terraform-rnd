@@ -60,37 +60,65 @@ resource "aws_route_table_association" "public-subnet-to-igw" {
   route_table_id = aws_route_table.public.id
 }
 
-# resource "aws_instance" "webserver" {
-# 	ami = "ami-0753e0e42b20e96e3"
-# 	instance_type = "t2.micro"
-# 	key_name = "mn-key-pair"
-# 	subnet_id = "subnet-09ab9c2d03d3b659d"
-# 	vpc_security_group_ids = [ aws_security_group.terraform-ssh-access.id ]
-# }
-# resource "aws_security_group" "terraform-ssh-access" {
-# 	name = "terraform-ssh-access"
-# 	description = "Allow SSH access from the Internet"
-# 	vpc_id = "vpc-0b4f416c15959de1b"
-# 	ingress {
-# 	from_port = 22
-# 	to_port = 22
-# 	protocol = "tcp"
-# 	cidr_blocks = ["0.0.0.0/0"]
-#     }
-# 	ingress {
-# 	from_port = 80
-#         to_port = 80
-#         protocol = "tcp"
-#         cidr_blocks = ["0.0.0.0/0"]
-# 	}
 
-# 	egress {
-# 	from_port = 0
-# 	to_port = 0
-# 	protocol = "-1"
-# 	cidr_blocks = ["0.0.0.0/0"]
-# 	}	
-# }
-# output "public_ip_address" {
-# 	value = aws_instance.webserver.public_ip
-# }
+data "aws_ami" "ubuntu20" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  owners = ["099720109477"] # Canonical
+}
+
+
+resource "aws_instance" "rnd-vm-1" {
+	ami           = data.aws_ami.ubuntu20.id
+	instance_type = "t2.micro"
+	key_name = "mn-new-key"
+	subnet_id = aws_subnet.rnd-public-subnet.id
+	vpc_security_group_ids = [ aws_security_group.terraform-ssh-access.id ]
+
+	tags = {
+      Name = "rnd-vm-1"
+    }
+	depends_on = [
+	  aws_security_group.terraform-ssh-access
+	]
+}
+resource "aws_security_group" "terraform-ssh-access" {
+	name = "terraform-ssh-access"
+	description = "Allow SSH access from the Internet"
+	vpc_id = aws_vpc.rnd-vpc.id
+	ingress {
+	from_port = 22
+	to_port = 22
+	protocol = "tcp"
+	cidr_blocks = ["0.0.0.0/0"]
+    }
+	ingress {
+	from_port = 80
+        to_port = 80
+        protocol = "tcp"
+        cidr_blocks = ["0.0.0.0/0"]
+	}
+
+	egress {
+	from_port = 0
+	to_port = 0
+	protocol = "-1"
+	cidr_blocks = ["0.0.0.0/0"]
+	}
+	depends_on = [
+	  aws_vpc.rnd-vpc
+	]
+}
+output "public_ip_address" {
+	value = aws_instance.rnd-vm-1.public_ip
+}
