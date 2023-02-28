@@ -94,9 +94,11 @@ resource "aws_instance" "rnd-vm-1" {
 
 	user_data = <<EOF
 #!/bin/bash
-echo "user_data insert started"
-hostname -i
-
+apt-get update
+apt-get install apache2 -y
+systemctl start apache2
+systemctl enable apache2
+echo “This is a test page" > /var/www/html/index.html
 EOF
 }
 
