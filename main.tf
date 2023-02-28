@@ -91,7 +91,15 @@ resource "aws_instance" "rnd-vm-1" {
 	depends_on = [
 	  aws_security_group.terraform-ssh-access
 	]
+
+	user_data = <<EOF
+#!/bin/bash
+echo "user_data insert started"
+hostname -i
+
+EOF
 }
+
 resource "aws_security_group" "terraform-ssh-access" {
 	name = "terraform-ssh-access"
 	description = "Allow SSH access from the Internet"
@@ -110,7 +118,7 @@ resource "aws_security_group" "terraform-ssh-access" {
         protocol = "tcp"
         cidr_blocks = ["0.0.0.0/0"]
 	}
-	
+
 	egress {
 	from_port = 0
 	to_port = 0
