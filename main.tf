@@ -18,6 +18,8 @@ resource "aws_subnet" "rnd-subnet1" {
     Name = "Main"
   }
 }
+
+#test
 # resource "aws_instance" "webserver" {
 # 	ami = "ami-0753e0e42b20e96e3"
 # 	instance_type = "t2.micro"
