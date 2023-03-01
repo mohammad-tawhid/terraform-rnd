@@ -93,7 +93,7 @@ resource "aws_instance" "rnd-vm-1" {
 	ami           = data.aws_ami.ubuntu20.id
 	instance_type = "t2.micro"
 	key_name = "mn-new-key"
-	subnet_id = aws_subnet.rnd-public-subnet.id
+	subnet_id = aws_subnet.rnd-private-subnet.id
 	vpc_security_group_ids = [ aws_security_group.terraform-ssh-access.id ]
 
 	tags = {
