@@ -13,11 +13,6 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/mohammad-tawhid/terraform-rnd'
             }
         }
-        stage('terraform format check') {
-            steps{
-                sh 'terraform fmt'
-            }
-        }
         stage('terraform Init') {
             steps{
                 sh 'terraform init -force-copy'
@@ -28,6 +23,13 @@ pipeline {
                 sh 'terraform plan'
             } 
         }
+        stage ('Approve Plan and continue to Apply') {
+            steps{
+            timeout(time: 3600, unit: 'SECONDS') {
+                input 'Do you want to proceed apply?'
+               }
+            }
+        }        
         stage('terraform apply') {
             steps{
                 sh 'terraform apply --auto-approve'
