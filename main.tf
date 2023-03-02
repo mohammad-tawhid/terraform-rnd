@@ -90,7 +90,7 @@ data "aws_ami" "amazon-2" {
 }
 
 resource "aws_instance" "rnd-vm-1" {
-	ami           = data.aws_ami.ubuntu20.id
+	ami           = "ami-03f6a11788f8e319e"
 	instance_type = "t2.micro"
 	key_name = "mn-new-key"
 	subnet_id = aws_subnet.rnd-private-subnet.id
