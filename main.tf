@@ -114,14 +114,14 @@ resource "aws_iam_role_policy_attachment" "iam_role_attachment" {
 
 resource "aws_iam_instance_profile" "ssm-profile-for-ec2" {
   name = "ssm-profile-for-ec2"
-  role = aws_iam_role.ssm-role-for-ect-login
+  role = aws_iam_role.ssm-role-for-ect-login.name
 }
 
 resource "aws_instance" "rnd-vm-1" {
 	ami           = "ami-03f6a11788f8e319e"
 	instance_type = "t2.micro"
 	key_name = "mn-new-key"
-	subnet_id = aws_subnet.rnd-private-subnet.id
+	subnet_id = aws_subnet.rnd-public-subnet.id
 	vpc_security_group_ids = [ aws_security_group.terraform-ssh-access.id ]
   iam_instance_profile = aws_iam_instance_profile.ssm-profile-for-ec2.name
 
