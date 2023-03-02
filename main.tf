@@ -63,30 +63,58 @@ resource "aws_route_table_association" "public-subnet-to-igw" {
 }
 
 
-data "aws_ami" "ubuntu20" {
-  most_recent = true
+# data "aws_ami" "ubuntu20" {
+#   most_recent = true
 
-  filter {
-    name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
-  }
+#   filter {
+#     name   = "name"
+#     values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
+#   }
 
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
+#   filter {
+#     name   = "virtualization-type"
+#     values = ["hvm"]
+#   }
 
-  owners = ["099720109477"] # Canonical
+#   owners = ["099720109477"] # Canonical
+# }
+
+# data "aws_ami" "amazon-2" {
+#   most_recent = true
+
+#   filter {
+#     name = "name"
+#     values = ["amzn2-ami-hvm-*-x86_64-ebs"]
+#   }
+#   owners = ["amazon"]
+# }
+
+resource "aws_iam_role" "ssm-role-for-ect-login" {
+  name = "ec2_role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Sid    = "RoleForEC2"
+        Principal = {
+          Service = "ec2.amazonaws.com"
+        }
+      },
+    ]
+  })
 }
 
-data "aws_ami" "amazon-2" {
-  most_recent = true
+resource "aws_iam_role_policy_attachment" "iam_role_attachment" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+  role       = aws_iam_role.ssm-role-for-ect-login.name
+}
 
-  filter {
-    name = "name"
-    values = ["amzn2-ami-hvm-*-x86_64-ebs"]
-  }
-  owners = ["amazon"]
+resource "aws_iam_instance_profile" "ssm-profile-for-ec2" {
+  name = "ssm-profile-for-ec2"
+  role = aws_iam_role.ssm-role-for-ect-login
 }
 
 resource "aws_instance" "rnd-vm-1" {
@@ -95,6 +123,7 @@ resource "aws_instance" "rnd-vm-1" {
 	key_name = "mn-new-key"
 	subnet_id = aws_subnet.rnd-private-subnet.id
 	vpc_security_group_ids = [ aws_security_group.terraform-ssh-access.id ]
+  iam_instance_profile = aws_iam_instance_profile.ssm-profile-for-ec2.name
 
 	tags = {
       Name = "rnd-vm-1"
