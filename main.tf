@@ -102,6 +102,10 @@ resource "aws_iam_role" "ssm-role-for-ect-login" {
   })
 }
 
+resource "aws_key_pair" "rnd-key" {
+  key_name   = "rnd-key"
+  public_key = "sh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDBcI/U4o7B6ZafoyP14UbPRtjL5bexzDmxSaHnpU6aAxvhHk6qazChlXZOThH/KX3jRmHpjaQGsLQ0O+RpmRT2anpf0AMHiyToDMs40swHtODGy4BDGq6oymEgZsVP7qPXjYhYaDTFVKYIFX4WSwP5Ii/BrmlmPysDGOgwtSyCWcABpsRNUsF+16da0s0hrd3qlqCDJbm8q4m0b//GbkUXBfIz9JUImPVnnCVwencHUpTxizPiX1CtYXJL4o+TNL2jsi4F9xLGtO+DRA49mqO+ZYNQ84qWGTBf/HtPXGruvP2wlKv+ZHB1GA7O4AxeWPRVEv65yjjyCwj4+ZPIFORj root@ip-172-31-62-9.ec2.internal"
+}
 resource "aws_iam_role_policy_attachment" "iam_role_attachment" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
   role       = aws_iam_role.ssm-role-for-ect-login.name
@@ -115,7 +119,7 @@ resource "aws_iam_instance_profile" "ssm-profile-for-ec2" {
 resource "aws_instance" "rnd-vm-1" {
 	ami           = "ami-006dcf34c09e50022"
 	instance_type = "t2.micro"
-	key_name = "mn-cloud-guru-key"
+	key_name = aws_key_pair.rnd-key.name
 	subnet_id = aws_subnet.rnd-public-subnet.id
 	vpc_security_group_ids = [ aws_security_group.terraform-ssh-access.id ]
   iam_instance_profile = aws_iam_instance_profile.ssm-profile-for-ec2.name
