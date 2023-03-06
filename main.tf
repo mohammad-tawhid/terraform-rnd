@@ -1,9 +1,4 @@
-resource "aws_s3_bucket" "mn-test-bucket" {
-	bucket = "mn-bucket-27022023"
-}
-resource "aws_s3_bucket" "mn-test-bucket-2" {
-	bucket = "mn-bucket-27022023ok-final"
-}
+
 
 resource "aws_vpc" "rnd-vpc" {
   cidr_block = "10.0.0.0/16"
@@ -118,9 +113,9 @@ resource "aws_iam_instance_profile" "ssm-profile-for-ec2" {
 }
 
 resource "aws_instance" "rnd-vm-1" {
-	ami           = "ami-03f6a11788f8e319e"
+	ami           = "ami-006dcf34c09e50022"
 	instance_type = "t2.micro"
-	key_name = "mn-new-key"
+	key_name = "mn-cloud-guru-key"
 	subnet_id = aws_subnet.rnd-public-subnet.id
 	vpc_security_group_ids = [ aws_security_group.terraform-ssh-access.id ]
   iam_instance_profile = aws_iam_instance_profile.ssm-profile-for-ec2.name
