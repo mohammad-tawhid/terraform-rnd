@@ -104,7 +104,7 @@ resource "aws_iam_role" "ssm-role-for-ect-login" {
 
 resource "aws_key_pair" "rnd-key" {
   key_name   = "rnd-key"
-  public_key = "sh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDBcI/U4o7B6ZafoyP14UbPRtjL5bexzDmxSaHnpU6aAxvhHk6qazChlXZOThH/KX3jRmHpjaQGsLQ0O+RpmRT2anpf0AMHiyToDMs40swHtODGy4BDGq6oymEgZsVP7qPXjYhYaDTFVKYIFX4WSwP5Ii/BrmlmPysDGOgwtSyCWcABpsRNUsF+16da0s0hrd3qlqCDJbm8q4m0b//GbkUXBfIz9JUImPVnnCVwencHUpTxizPiX1CtYXJL4o+TNL2jsi4F9xLGtO+DRA49mqO+ZYNQ84qWGTBf/HtPXGruvP2wlKv+ZHB1GA7O4AxeWPRVEv65yjjyCwj4+ZPIFORj root@ip-172-31-62-9.ec2.internal"
+  public_key = "c2gtcnNhIEFBQUFCM056YUMxeWMyRUFBQUFEQVFBQkFBQUJBUURCY0kvVTRvN0I2WmFmb3lQMTRVYlBSdGpMNWJleHpEbXhTYUhucFU2YUF4dmhIazZxYXpDaGxYWk9UaEgvS1gzalJtSHBqYVFHc0xRME8rUnBtUlQyYW5wZjBBTUhpeVRvRE1zNDBzd0h0T0RHeTRCREdxNm95bUVnWnNWUDdxUFhqWWhZYURURlZLWUlGWDRXU3dQNUlpL0JybWxtUHlzREdPZ3d0U3lDV2NBQnBzUk5Vc0YrMTZkYTBzMGhyZDNxbHFDREpibThxNG0wYi8vR2JrVVhCZkl6OUpVSW1QVm5uQ1Z3ZW5jSFVwVHhpelBpWDFDdFlYSkw0bytUTkwyanNpNEY5eExHdE8rRFJBNDltcU8rWllOUTg0cVdHVEJmL0h0UFhHcnV2UDJ3bEt2K1pIQjFHQTdPNEF4ZVdQUlZFdjY1eWpqeUN3ajQrWlBJRk9SaiByb290QGlwLTE3Mi0zMS02Mi05LmVjMi5pbnRlcm5hbA=="
 }
 resource "aws_iam_role_policy_attachment" "iam_role_attachment" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
@@ -128,7 +128,8 @@ resource "aws_instance" "rnd-vm-1" {
       Name = "rnd-vm-1"
     }
 	depends_on = [
-	  aws_security_group.terraform-ssh-access
+	  aws_security_group.terraform-ssh-access,
+	  aws_key_pair.rnd-key
 	]
 
     user_data = <<EOF
