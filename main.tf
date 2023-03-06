@@ -119,7 +119,7 @@ resource "aws_iam_instance_profile" "ssm-profile-for-ec2" {
 resource "aws_instance" "rnd-vm-1" {
 	ami           = "ami-006dcf34c09e50022"
 	instance_type = "t2.micro"
-	key_name = aws_key_pair.rnd-key.name
+	key_name = aws_key_pair.rnd-key.key_name
 	subnet_id = aws_subnet.rnd-public-subnet.id
 	vpc_security_group_ids = [ aws_security_group.terraform-ssh-access.id ]
   iam_instance_profile = aws_iam_instance_profile.ssm-profile-for-ec2.name
