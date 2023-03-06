@@ -4,13 +4,13 @@ pipeline {
        terraform 'terraform'
     }
     environment {
-        AWS_ACCESS_KEY_ID     = credentials('mn_iam_aws_access_key')
-        AWS_SECRET_ACCESS_KEY = credentials('mn_iam_aws_secret_key')
+        AWS_ACCESS_KEY_ID     = credentials('aws_access_key')
+        AWS_SECRET_ACCESS_KEY = credentials('aws_secret_key')
     }
     stages {
         stage('Git checkout') {
            steps{
-                git branch: 'main', url: 'https://github.com/mohammad-tawhid/terraform-rnd'
+                git branch: 'rnd', url: 'https://github.com/mohammad-tawhid/terraform-rnd'
             }
         }
         stage('terraform Init') {
