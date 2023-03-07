@@ -15,7 +15,7 @@ sudo amazon-linux-extras install java-openjdk11 -y
 
 sudo yum install jenkins -y
 sudo yum -y install packer
-yum install git -y
+sudo yum install git -y
 
 sudo systemctl enable jenkins
 sudo systemctl start jenkins
