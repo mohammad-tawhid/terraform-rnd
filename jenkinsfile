@@ -6,6 +6,7 @@ pipeline {
     environment {
         AWS_ACCESS_KEY_ID     = credentials('aws_access_key')
         AWS_SECRET_ACCESS_KEY = credentials('aws_secret_key')
+        AWS_DEFAULT_REGION = us-east-1
     }
     stages {
         stage('Git checkout') {
@@ -13,6 +14,11 @@ pipeline {
                 git branch: 'rnd', url: 'https://github.com/mohammad-tawhid/terraform-rnd'
             }
         }
+        stage('packer build') {
+            steps{
+                sh 'packer build ./image_build/'
+            }
+        }       
         stage('terraform Init') {
             steps{
                 sh 'terraform init -force-copy'
