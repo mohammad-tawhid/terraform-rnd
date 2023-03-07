@@ -116,8 +116,23 @@ resource "aws_iam_instance_profile" "ssm-profile-for-ec2" {
   role = aws_iam_role.ssm-role-for-ect-login.name
 }
 
+
+data "aws_ami" "mn-custom-image" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["mn-custom-image*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+}
+
 resource "aws_instance" "rnd-vm-1" {
-	ami           = "ami-006dcf34c09e50022"
+	ami           = data.aws_ami.mn-custom-image.id
 	instance_type = "t2.micro"
 	key_name = aws_key_pair.rnd-key.key_name
 	subnet_id = aws_subnet.rnd-public-subnet.id
@@ -132,14 +147,14 @@ resource "aws_instance" "rnd-vm-1" {
 	  aws_key_pair.rnd-key
 	]
 
-    user_data = <<EOF
-#!/bin/bash
-apt-get install apache2 -y
-systemctl start apache2
-systemctl enable apache2
-echo “This is a test page okk" > /var/www/html/index.html
-echo "<h1>Deployed via Terraform</h1>" | sudo tee /var/www/html/index.html
-EOF
+    # user_data = <<EOF
+# #!/bin/bash
+# apt-get install apache2 -y
+# systemctl start apache2
+# systemctl enable apache2
+# echo “This is a test page okk" > /var/www/html/index.html
+# echo "<h1>Deployed via Terraform</h1>" | sudo tee /var/www/html/index.html
+# EOF
  
 	# user_data = <<EOF
 	# 	#!/bin/bash
