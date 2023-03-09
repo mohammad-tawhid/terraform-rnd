@@ -6,16 +6,20 @@ source "amazon-ebs" "my-website" {
 }
 
 build {
+//     sources = ["source.amazon-ebs.my-website"]
+//     provisioner "shell" {
+//         execute_command = "sudo -S env {{ .Vars }} {{ .Path }}" 
+//         inline = [
+//             "yum update -y",
+//             "yum install -y httpd",
+//             "systemctl start httpd",
+//             "systemctl enable httpd",
+//             "echo '<h1>Hello World from $(hostname -f)</h1>' > /var/www/html/index.html"
+//    ]
+//  }
+
     sources = ["source.amazon-ebs.my-website"]
-    provisioner "shell" {
-        execute_command = "sudo -S env {{ .Vars }} {{ .Path }}" 
-        inline = [
-            "yum update -y",
-            "yum install -y httpd",
-            "systemctl start httpd",
-            "systemctl enable httpd",
-            "echo '<h1>Hello World from $(hostname -f)</h1>' > /var/www/html/index.html"
-   ]
- }
+    provisioner "ansible" {
+      playbook_file = "ansible/playbook.yml"
 }
 
