@@ -45,6 +45,6 @@ pipeline {
         //     steps{
         //         cleanWs()
         //     }
-        // }
+        // ok }
       }
     }
