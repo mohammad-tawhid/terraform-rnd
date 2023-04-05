@@ -1,7 +1,7 @@
 source "amazon-ebs" "my-website" {
         ssh_username = "ec2-user"
         ami_name     = "mn-custom-image-{{timestamp}}"
-        source_ami   = "ami-006dcf34c09e50022"
+        source_ami   = "ami-0bf97847fcd5c9f57"
         instance_type = "t2.micro"
 }
 
