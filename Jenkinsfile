@@ -60,7 +60,7 @@ pipeline {
                         when { expression { params["${MODULES}"] == "Yes" } }
                         steps {
                             dir("packer") {
-                                sh 'packer build ./image_build/'
+                                sh 'packer build ./image_build/image.pkr.hcl'
                             }
                         }
                     }
